@@ -9,6 +9,9 @@ public class DetailsMenu : MonoBehaviour
     [SerializeField] private Text nameText, ageText, strengthText, speedText;
     [SerializeField] private Text[] comboNameText, comboMoveText;
 
+    [SerializeField] private GameObject confirmationPopup;
+    [SerializeField] private Text nameDelete;
+
     private DataController dataController;
     private List<Character> characters;
     private int index;
@@ -17,7 +20,8 @@ public class DetailsMenu : MonoBehaviour
     void Start()
     {
         dataController = FindObjectOfType<DataController>();
-        character = dataController.charactersData.characters[dataController.currentCharacter];
+        characters = dataController.characters;
+        character = characters[dataController.currentCharacter];
 
         // Fill basic information fields
         nameText.text = character.name;
@@ -44,5 +48,25 @@ public class DetailsMenu : MonoBehaviour
     public void Back()
     {
         SceneManager.LoadScene("CharacterSelection");
+    }
+
+    public void ToggleDeletePopup()
+    {
+        if (!confirmationPopup.activeSelf)
+        {
+            nameDelete.text = characters[index].name;
+            confirmationPopup.SetActive(true);
+        }
+        else
+            confirmationPopup.SetActive(false);
+    }
+
+    public void DeleteCharacter()
+    {
+        characters.Remove(characters[index]);
+        dataController.charactersData.characters = characters.ToArray();
+        dataController.SaveCharacters();
+        ToggleDeletePopup();
+        Back();
     }
 }

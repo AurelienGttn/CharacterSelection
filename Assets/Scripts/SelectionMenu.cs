@@ -20,7 +20,7 @@ public class SelectionMenu : MonoBehaviour
         confirmationPopup.SetActive(false);
 
         dataController = FindObjectOfType<DataController>();
-        characters = new List<Character>(dataController.charactersData.characters);
+        characters = dataController.characters;
         index = dataController.currentCharacter;
         nameDisplay.text = characters[index].name;
     }
